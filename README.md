@@ -43,6 +43,34 @@ Le serveur écoute par défaut sur `http://127.0.0.1:8080/v1`. Il reste local à
 la machine. Les valeurs par défaut peuvent être ajustées avec `LLAMA_HOST`,
 `LLAMA_PORT`, `LLAMA_GPU_LAYERS` et `LLAMA_CTX_SIZE`.
 
+## Utiliser PaddleOCR-VL-1.6
+
+PaddleOCR-VL-1.6 a besoin du GGUF du modèle et du fichier de vision `mmproj`.
+Place les deux dans `models/` et utilise un `mmproj` compatible avec la version
+et la quantification du modèle. Par exemple, avec
+`PaddleOCR-VL-1.6.Q8_0.gguf` et `PaddleOCR-VL-1.6-mmproj.gguf`, lance l’OCR
+d’une image ainsi :
+
+```bash
+cd ~/Documents/llama.cpp-tools-GB10
+"$HOME/llama.cpp/build-gb10/bin/llama-cli" \
+  -m "$PWD/models/PaddleOCR-VL-1.6.Q8_0.gguf" \
+  --mmproj "$PWD/models/PaddleOCR-VL-1.6-mmproj.gguf" \
+  --image "$PWD/document.png" \
+  -p "OCR:" \
+  -n 4096
+```
+
+Pour démarrer le serveur avec ce modèle, passe aussi le chemin du `mmproj` :
+
+```bash
+./start-server.sh PaddleOCR-VL-1.6.Q8_0.gguf \
+  --mmproj "$PWD/models/PaddleOCR-VL-1.6-mmproj.gguf" --temp 0
+```
+
+Le nom du fichier `mmproj` peut varier : adapte le chemin à celui que tu as
+téléchargé. Pour l’API du serveur, envoie l’image avec le prompt `OCR:`.
+
 ## Mettre llama.cpp à jour
 
 ```bash

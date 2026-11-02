@@ -1,5 +1,27 @@
+# Modeles locaux : conserver uniquement le README du dossier.
 models/*
+!models/README.txt
+
+# Fichiers de poids de modeles.
 *.ckpt
 *.pt
+*.pth
 *.safetensors
 *.gguf
+*.ggml
+*.onnx
+*.tflite
+
+# Repertoires de compilation locaux.
+build/
+build-*/
+cmake-build-*/
+
+# Fichiers temporaires et systeme.
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
