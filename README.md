@@ -1,0 +1,55 @@
+# Outils llama.cpp locaux
+
+Ce dossier contient les scripts de lancement et de mise à jour pour le clone
+`~/llama.cpp`. Les modèles GGUF à utiliser sont à placer directement dans
+`models/`.
+
+## Installer sur un GB10
+
+Sur un GB10 neuf, lance l'installateur sans `sudo` :
+
+```bash
+cd ~/Documents/llama.cpp-tools-GB10
+./install.sh
+```
+
+Il installe les dépendances système avec `sudo`, vérifie le GPU et cherche
+`nvcc` dans `/usr/local/cuda/bin`, `/usr/local/cuda-*/bin` et le `PATH`.
+Il passe explicitement le chemin de `nvcc` à CMake pour éviter l'erreur
+`No CMAKE_CUDA_COMPILER could be found`, puis clone ou met à jour llama.cpp,
+compile pour sm_121 et enregistre le commit compilé. Il ne télécharge pas de
+modèle GGUF. Le pilote NVIDIA et CUDA Toolkit doivent déjà être installés ;
+l’installateur ne les installe pas et s’arrête avec une erreur explicite si
+`nvcc` est introuvable.
+
+## Lancer le serveur
+
+Depuis un terminal :
+
+```bash
+cd ~/Documents/llama.cpp-tools-GB10
+./start-server.sh
+```
+
+Le script lance automatiquement le seul fichier `.gguf` trouvé. S'il y en a
+plusieurs, il demande lequel utiliser. On peut aussi choisir directement un
+fichier :
+
+```bash
+./start-server.sh mon-modele.gguf
+```
+
+Le serveur écoute par défaut sur `http://127.0.0.1:8080/v1`. Il reste local à
+la machine. Les valeurs par défaut peuvent être ajustées avec `LLAMA_HOST`,
+`LLAMA_PORT`, `LLAMA_GPU_LAYERS` et `LLAMA_CTX_SIZE`.
+
+## Mettre llama.cpp à jour
+
+```bash
+cd ~/Documents/llama.cpp-tools-GB10
+./update.sh
+```
+
+Le script fait un `git pull --ff-only`. Il ne recompile que si le code a changé
+ou si les exécutables/le marqueur de build manquent. Il utilise
+`~/llama.cpp/build-gb10` et compile pour le GB10 avec CUDA.
